@@ -4,8 +4,8 @@ namespace HelpDesk.api.Models
 {
     public class TicketsDTO
     {
-        public Guid id { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public string TicketId { get; set; }
+        public DateTime CreatedAt { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public string? UpdatedBy { get; set; }
@@ -19,7 +19,7 @@ namespace HelpDesk.api.Models
             closed = 4
         };
 
-        public TicketStatus status { get; set; } = TicketStatus.open;
+        public TicketStatus status { get; set; } //= TicketStatus.open;
         public bool isActive { get; set; } = true;
         public enum TicketPriority
         {
@@ -29,7 +29,7 @@ namespace HelpDesk.api.Models
             urgent=20
         };
 
-        public TicketPriority Priority { get; set; } = TicketPriority.low;
+        public TicketPriority Priority { get; set; }// = TicketPriority.low;
 
         [Required(ErrorMessage ="Please enter subject of Ticket.")]
         [MaxLength(32)]
@@ -39,7 +39,7 @@ namespace HelpDesk.api.Models
         [MaxLength(200)]
         public string message { get; set; }
         public string requester { get; set; }
-        public int rating { get; set; } = 0;
-        public bool isSpam { get; set; } = false;
+        public int rating { get; set; }
+        public bool isSpam { get; set; }
     }
 }

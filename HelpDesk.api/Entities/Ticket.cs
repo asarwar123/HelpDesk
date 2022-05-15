@@ -38,5 +38,10 @@ namespace HelpDesk.api.Entities
         public string requester { get; set; } = String.Empty;
         public int rating { get; set; } = 0;
         public bool isSpam { get; set; } = false;
+
+        public static implicit operator Task<object>(Ticket? v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
