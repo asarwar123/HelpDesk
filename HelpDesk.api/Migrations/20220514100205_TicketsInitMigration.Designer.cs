@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HelpDesk.api.Migrations
 {
-    [DbContext(typeof(TicketContext))]
+    [DbContext(typeof(DataBaseContext))]
     [Migration("20220514100205_TicketsInitMigration")]
     partial class TicketsInitMigration
     {

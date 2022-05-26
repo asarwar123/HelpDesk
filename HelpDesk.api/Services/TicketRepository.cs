@@ -6,9 +6,9 @@ namespace HelpDesk.api.Services
 {
     public class TicketRepository : ITicketRepository
     {
-        private readonly TicketContext _context;
+        private readonly DataBaseContext _context;
 
-        public TicketRepository(TicketContext context)
+        public TicketRepository(DataBaseContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }

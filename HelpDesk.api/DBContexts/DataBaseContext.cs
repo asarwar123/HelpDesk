@@ -3,12 +3,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HelpDesk.api.DBContexts
 {
-    public class TicketContext: DbContext
+    public class DataBaseContext: DbContext
     {
-        public TicketContext(DbContextOptions<TicketContext> options):base(options)
+        public DataBaseContext(DbContextOptions<DataBaseContext> options):base(options)
         {
 
         }
         public DbSet<Ticket> Tickets { get; set; } = null!;
+        public DbSet<User> Users { get; set; } = null!;
+
     }
 }

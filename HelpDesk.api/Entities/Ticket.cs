@@ -13,20 +13,9 @@ namespace HelpDesk.api.Entities
         public DateTime? UpdatedAt { get; set; }
         public string? UpdatedBy { get; set; }
         
-        //open = 0,
-        //pending = 1,
-        //onhold = 2,
-        //solve = 3,
-        //closed = 4
-
         public int status { get; set; } = 0;
         public bool isActive { get; set; } = true;
         
-        //low = -10,
-        //medium = 0,
-        //high = 10,
-        //urgent = 20
-
         public int Priority { get; set; } = -10;
 
         [MaxLength(32)]

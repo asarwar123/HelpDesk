@@ -14,10 +14,11 @@ builder.Services.AddControllers(options =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<TicketContext>(
+builder.Services.AddDbContext<DataBaseContext>(
     dbContextOptions => dbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:HelpDeskSQLiteConectionString"]));
 
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
