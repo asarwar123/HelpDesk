@@ -1,0 +1,526 @@
+{
+	"info": {
+		"_postman_id": "73de3622-cc6b-443d-988b-f320d4926ccb",
+		"name": "HelpDesk",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authenticate",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userName\" : \"asarwar\",\r\n    \"password\" : \"2c9ee1f7c39db474ab66b53b108af9d7\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}} /{{version}}/authentication",
+					"host": [
+						"{{url}} "
+					],
+					"path": [
+						"{{version}}",
+						"authentication"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Tickets",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/xml",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{url}} /{{version}}/tickets",
+					"host": [
+						"{{url}} "
+					],
+					"path": [
+						"{{version}}",
+						"tickets"
+					],
+					"query": [
+						{
+							"key": "Accept",
+							"value": "application",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Single Ticket",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/xml",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{url}} /{{version}}/tickets/509E3AE2-96DC-4AEB-BFF0-517A2DAFA697",
+					"host": [
+						"{{url}} "
+					],
+					"path": [
+						"{{version}}",
+						"tickets",
+						"509E3AE2-96DC-4AEB-BFF0-517A2DAFA697"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Ticket",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"CreatedBy\" : \"Awais Azeem\",\r\n    \"subject\" : \"Email not recieved\",\r\n    \"message\" : \"I am unable to send/recieve on my newly creatly emial address\",\r\n    \"requester\" : \"awais.azeem@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}} /{{version}}/tickets",
+					"host": [
+						"{{url}} "
+					],
+					"path": [
+						"{{version}}",
+						"tickets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Ticket (invalid body)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"invalid property\" : \"Tayyab Azeem\",\r\n    \"message\" : \"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\",\r\n    \"requester\" : \"awais.azeem@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7265/v1/tickets",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7265",
+					"path": [
+						"v1",
+						"tickets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Full Ticket",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"CreatedBy\" : \"Tayyab Azeem\",\r\n    \"subject\" : \"Updated - Email not recieved\",\r\n    \"message\" : \"updated - I am unable to send/recieve on my newly creatly emial address\",\r\n    \"requester\" : \"updated - awais.azeem@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}} /{{version}}/tickets/c0af9ad8-8eb0-4f6e-8fa7-93d7374e7a41",
+					"host": [
+						"{{url}} "
+					],
+					"path": [
+						"{{version}}",
+						"tickets",
+						"c0af9ad8-8eb0-4f6e-8fa7-93d7374e7a41"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Full Ticket (not found)",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"CreatedBy\" : \"Tayyab Azeem\",\r\n    \"subject\" : \"Updated - Email not recieved\",\r\n    \"message\" : \"updated - I am unable to send/recieve on my newly creatly emial address\",\r\n    \"requester\" : \"updated - awais.azeem@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}} /{{version}}/tickets/c0af9ad8-8eb0-4f6e-8fa7-93d7374e7a99",
+					"host": [
+						"{{url}} "
+					],
+					"path": [
+						"{{version}}",
+						"tickets",
+						"c0af9ad8-8eb0-4f6e-8fa7-93d7374e7a99"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ticket Update Metadata",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"op\":\"replace\",\r\n        \"path\":\"/updateby\",\r\n        \"value\":\"updated by value\"\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}} /{{version}}/tickets/6911af07-05b4-42dd-8870-ec2358966f7b",
+					"host": [
+						"{{url}} "
+					],
+					"path": [
+						"{{version}}",
+						"tickets",
+						"6911af07-05b4-42dd-8870-ec2358966f7b"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Ticket",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}} /{{version}}/tickets/509E3AE2-96DC-4AEB-BFF0-517A2DAFA697",
+					"host": [
+						"{{url}} "
+					],
+					"path": [
+						"{{version}}",
+						"tickets",
+						"509E3AE2-96DC-4AEB-BFF0-517A2DAFA697"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Tickets (filter only)",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/xml",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "s"
+				},
+				"url": {
+					"raw": "{{url}} /{{version}}/tickets?filterText=Test Tickeet",
+					"host": [
+						"{{url}} "
+					],
+					"path": [
+						"{{version}}",
+						"tickets"
+					],
+					"query": [
+						{
+							"key": "Accept",
+							"value": "application",
+							"disabled": true
+						},
+						{
+							"key": "filterText",
+							"value": "Test Tickeet"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Tickets (filtered & search)",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/xml",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "s"
+				},
+				"url": {
+					"raw": "{{url}} /{{version}}/tickets?filterText=Test Tickeet&queryString=ticket",
+					"host": [
+						"{{url}} "
+					],
+					"path": [
+						"{{version}}",
+						"tickets"
+					],
+					"query": [
+						{
+							"key": "filterText",
+							"value": "Test Tickeet"
+						},
+						{
+							"key": "Accept",
+							"value": "application",
+							"disabled": true
+						},
+						{
+							"key": "queryString",
+							"value": "ticket"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Tickets (Search only)",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/xml",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "s"
+				},
+				"url": {
+					"raw": "{{url}} /{{version}}/tickets?queryString=unable",
+					"host": [
+						"{{url}} "
+					],
+					"path": [
+						"{{version}}",
+						"tickets"
+					],
+					"query": [
+						{
+							"key": "Accept",
+							"value": "application",
+							"disabled": true
+						},
+						{
+							"key": "queryString",
+							"value": "unable"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Tickets (paging)",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/xml",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "s"
+				},
+				"url": {
+					"raw": "{{url}} /{{version}}/tickets?pageNumber=3&pageSize=1",
+					"host": [
+						"{{url}} "
+					],
+					"path": [
+						"{{version}}",
+						"tickets"
+					],
+					"query": [
+						{
+							"key": "Accept",
+							"value": "application",
+							"disabled": true
+						},
+						{
+							"key": "pageNumber",
+							"value": "3"
+						},
+						{
+							"key": "pageSize",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
