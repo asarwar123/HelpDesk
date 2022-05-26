@@ -12,9 +12,11 @@ namespace HelpDesk.api.Services
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        public async Task<Ticket?> createTicketAsync(Ticket ticket)
+
+        public async Task<int> createTicketAsync(Ticket ticket)
         {
-            throw new NotImplementedException();
+            _context.Tickets.Add(ticket);
+            return await _context.SaveChangesAsync();
         }
 
         public async Task<bool> deleteTicketAysnc(Guid ticketId)
@@ -34,14 +36,64 @@ namespace HelpDesk.api.Services
 
         public async Task<Ticket?> getTicketAsync(Guid ticketId)
         {
-            Ticket? ticket = await _context.Tickets.FirstOrDefaultAsync(t => t.id == ticketId);
+            Ticket? ticket = await _context.Tickets.FindAsync(ticketId);
             return ticket;
         }
 
-        public async Task<IEnumerable<Ticket>> getTicketsAsync()
+        public async Task<(IEnumerable<Ticket>,PaginationMetadata)> getTicketsAsync(int pageSize, int pageNumber)
         {
-            IEnumerable<Ticket> tickets = await _context.Tickets.OrderBy(t => t.CreatedAt).ToListAsync();
-            return tickets;
+            //IEnumerable<Ticket> tickets = await _context.Tickets.OrderBy(t => t.CreatedAt).ToListAsync();
+            var collection = _context.Tickets as IQueryable<Ticket>;
+
+            var TotalCount = await collection.CountAsync();
+
+            var paginationMetaData = new PaginationMetadata(TotalCount, pageSize, pageNumber);
+
+            var collectionToReturn = await collection
+                .Skip(pageSize * (pageNumber - 1))
+                .Take(pageSize)
+                .OrderBy(t => t.CreatedAt)
+                .ToListAsync();
+
+            return (collectionToReturn, paginationMetaData);
+        }
+
+        public async Task<(IEnumerable<Ticket>, PaginationMetadata)> getTicketsAsync(string? filterText, string? queryString,int pageSize,int pageNumber)
+        {
+            if (String.IsNullOrEmpty(filterText)
+                && String.IsNullOrEmpty(queryString))
+            {
+                return await getTicketsAsync(pageSize,pageNumber);
+            }
+
+            var collection = _context.Tickets as IQueryable<Ticket>;
+
+            if (!string.IsNullOrEmpty(filterText))
+            {
+                filterText = filterText.Trim();
+                collection = collection.Where(c => c.subject == filterText);
+            }
+
+            if (!string.IsNullOrEmpty(queryString))
+            {
+                queryString = queryString.Trim();
+                collection = collection.Where(c => c.message.Contains(queryString) ||
+                                                    c.subject.Contains(queryString));
+            }
+
+            var TotalCount = await collection.CountAsync();
+
+            var paginationMetaData = new PaginationMetadata(TotalCount,pageSize,pageNumber);
+
+            var collectionToReturn = await collection
+                .Skip(pageSize * (pageNumber - 1))
+                .Take(pageSize)
+                .OrderBy(t => t.CreatedAt)
+                .ToListAsync();
+
+            return (collectionToReturn, paginationMetaData);
+
+            //return await collection.OrderBy(t => t.CreatedAt).ToListAsync();
         }
 
         public async Task<Ticket?> updateTicketAsync(Guid ticketId)

@@ -4,9 +4,10 @@ namespace HelpDesk.api.Services
 {
     public interface ITicketRepository
     {
-        Task<IEnumerable<Ticket>> getTicketsAsync();
+        Task<(IEnumerable<Ticket>, PaginationMetadata)> getTicketsAsync(int pageSize, int pageNumber);
         Task<Ticket?> getTicketAsync(Guid ticketId);
-        Task<Ticket?> createTicketAsync(Ticket ticket);
+        Task<(IEnumerable<Ticket>, PaginationMetadata)> getTicketsAsync(string? filterText,string? queryString,int pageSize,int pageNumber);
+        Task<int> createTicketAsync(Ticket ticket);
         Task<Ticket?> updateTicketAsync(Guid ticketId);
         Task<bool> deleteTicketAysnc(Guid ticketId);
     }

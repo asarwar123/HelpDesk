@@ -18,6 +18,7 @@ builder.Services.AddDbContext<TicketContext>(
     dbContextOptions => dbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:HelpDeskSQLiteConectionString"]));
 
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 

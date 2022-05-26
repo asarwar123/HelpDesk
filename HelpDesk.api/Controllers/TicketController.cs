@@ -3,28 +3,32 @@ using HelpDesk.api.Services;
 using HelpDesk.api.Entities;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
+using System.Text.Json;
 
 namespace HelpDesk.api.Controllers
 {
     [ApiController]
     [Route("v1/tickets")]
+
     public class TicketController : ControllerBase
     {
-        private readonly TicketRepository _repository;
+        private readonly ITicketRepository _repository;
+        private readonly IMapper _mapper;
+        private const int maxPageSize = 10;
 
         public ILogger<TicketController> _logger { get; }
 
-        public TicketController(ILogger<TicketController> logger, TicketRepository repository)
+        public TicketController(ILogger<TicketController> logger, ITicketRepository repository,IMapper mapper)
         {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-        }
+            _logger = logger ?? 
+                throw new ArgumentNullException(nameof(logger));
 
-        [HttpGet]
-        public IActionResult ListTickets()
-        {
-            //dummydata.FillData();
-            return Ok(dummydata.Tickets);
+            _repository = repository ?? 
+                throw new ArgumentNullException(nameof(repository));
+
+            _mapper = mapper ?? 
+                throw new ArgumentNullException(nameof(mapper));
         }
 
         [HttpGet("{id}", Name = "GetTicketByID")]
@@ -32,23 +36,53 @@ namespace HelpDesk.api.Controllers
         {
             try
             {
-                IEnumerable<Ticket> allTickets = await _repository.getTicketsAsync();
+                Ticket? allTickets = await _repository.getTicketAsync(id);
 
-                /////////////// AUTOMAPPER
+                TicketsDTO ticketsDto = _mapper.Map<TicketsDTO>(allTickets);
 
-                TicketsDTO? ticketDto = dummydata.Tickets.FirstOrDefault(d => d.id == id);
-
-                if (ticketDto == null)
+                if (ticketsDto == null)
                 {
                     _logger.LogInformation($"Ticket with id '{id}' wasn't find");
                     return NotFound();
                 }
 
-                return Ok(ticketDto);
+                return Ok(ticketsDto);
             }
             catch (Exception ex)
             {
                 _logger.LogCritical($"Exception occured while getting Ticket ID: {id}", ex);
+                return StatusCode(500, "A problem occured while handling your requet");
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<TicketsDTO>> GetAllTickets(string? filterText,string? queryString,int pageSize=10,int pageNumber=1)
+        {
+            try
+            {
+                if (pageSize > maxPageSize)
+                    pageSize = maxPageSize;
+
+                //IEnumerable<Ticket> allTickets = await _repository.getTicketsAsync(filterText,queryString,pageSize,pageNumber);
+
+                var (allTickets,paginationmetadata) = await _repository.getTicketsAsync(filterText, queryString, pageSize, pageNumber);
+
+
+                IEnumerable<TicketsDTO> ticketsDto = _mapper.Map<IEnumerable<TicketsDTO>>(allTickets);
+
+                if (ticketsDto.Count() == 0)
+                {
+                    _logger.LogInformation($"No data found");
+                    return NotFound();
+                }
+
+                Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(paginationmetadata));
+
+                return Ok(ticketsDto);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical($"Exception occured while getting All Tickets", ex);
                 return StatusCode(500, "A problem occured while handling your requet");
             }
         }
@@ -58,16 +92,16 @@ namespace HelpDesk.api.Controllers
         {
             try
             {
-                ///////////// Auto Mapper ticketCreationDTO -> Entities.Ticket
-                Ticket newTicket = new Ticket();
-                
-
-                //newTicket.id = Guid.NewGuid();
-                //dummydata.InsertTicket(newTicket);
-
-                //return CreatedAtRoute("GetTicketByID", newTicket.id );
+                Ticket newTicket = _mapper.Map<Ticket>(newCreationTicket);
 
                 await _repository.createTicketAsync(newTicket);
+
+                //TicketsDTO displayTicket = _mapper.Map<TicketsDTO>(newTicket);
+                //return CreatedAtRoute("GetTicketByID",
+                //    new
+                //    {
+                //        id = newTicket.id
+                //    });
 
                 return Ok(newTicket);
             }
@@ -83,17 +117,19 @@ namespace HelpDesk.api.Controllers
         {
             try
             {
-                TicketsDTO? orignalTicket = dummydata.Tickets.Find(t => t.id == TicketId);
+                 return NotFound();
 
-                if (orignalTicket == null)
-                    return NotFound();
-                else
-                {
-                    if (dummydata.UpdateTicket(TicketId, updatedTicket))
-                        return NoContent();
-                    else
-                        return NotFound();
-                }
+                //TicketsDTO? orignalTicket = dummydata.Tickets.Find(t => t.id == TicketId);
+
+                //if (orignalTicket == null)
+                //    return NotFound();
+                //else
+                //{
+                //    if (dummydata.UpdateTicket(TicketId, updatedTicket))
+                //        return NoContent();
+                //    else
+                //        return NotFound();
+                //  }
             }
             catch (Exception ex)
             {
