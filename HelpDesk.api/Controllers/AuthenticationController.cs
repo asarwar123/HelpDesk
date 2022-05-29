@@ -9,7 +9,11 @@ using System.Text;
 
 namespace HelpDesk.api.Controllers
 {
-    [Route("v1/authentication")]
+    /// <summary>
+    /// All actions for Authentication
+    /// </summary>
+    [ApiVersion("1.0")]
+    [Route("v{version:apiVersion}/authentication")]
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
@@ -24,10 +28,16 @@ namespace HelpDesk.api.Controllers
             _configuration = configuration ?? 
                 throw new ArgumentNullException(nameof(configuration));
         }
+
+        /// <summary>
+        /// UserInfo for login
+        /// </summary>
         public class UserInfoDTO
         {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
             public string userName { get; set; }
             public string password { get; set; }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 
             public UserInfoDTO(string userName, string password)
             {
@@ -36,6 +46,15 @@ namespace HelpDesk.api.Controllers
             }
         }
 
+        /// <summary>
+        /// Authenticate a user
+        /// </summary>
+        /// <param name="userInfo">UserInfo Object</param>
+        /// <returns>A Token</returns>
+        /// <response code="200">User succesfuly authenticated & token is sent in respnse</response>
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpPost]
         public ActionResult<string> Authenticate(UserInfoDTO userInfo)
         {
@@ -68,8 +87,6 @@ namespace HelpDesk.api.Controllers
             }
             else
                 return NotFound();
-
-
         }
     }
 }

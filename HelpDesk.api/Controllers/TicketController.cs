@@ -5,19 +5,26 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HelpDesk.api.Controllers
 {
+    /// <summary>
+    /// All actions about tickets
+    /// </summary>
     [ApiController]
-    [Route("v1/tickets")]
+    [ApiVersion("1.0")]
+    [ApiVersion("1.1")]
+    [Route("v{version:apiVersion}/tickets")]
+    [Authorize]
 
     public class TicketController : ControllerBase
     {
         private readonly ITicketRepository _repository;
         private readonly IMapper _mapper;
         private const int maxPageSize = 10;
+        private readonly ILogger<TicketController> _logger;
 
-        public ILogger<TicketController> _logger { get; }
 
         public TicketController(ILogger<TicketController> logger, ITicketRepository repository,IMapper mapper)
         {
@@ -31,7 +38,17 @@ namespace HelpDesk.api.Controllers
                 throw new ArgumentNullException(nameof(mapper));
         }
 
+        /// <summary>
+        /// Get a single tickets by Ticket ID
+        /// </summary>
+        /// <param name="id">ID of the ticket</param>
+        /// <returns>An actionresult of TicketsDTO</returns>
+        /// <response code="200">Returns the requested Ticket</response>
         [HttpGet("{id}", Name = "GetTicketByID")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+
         public async Task<ActionResult<TicketsDTO>> GetTickets(Guid id)
         {
             try
@@ -55,7 +72,19 @@ namespace HelpDesk.api.Controllers
             }
         }
 
+        /// <summary>
+        /// Get all tickets
+        /// </summary>
+        /// <param name="filterText">Filter by Text</param>
+        /// <param name="queryString">Search query string</param>
+        /// <param name="pageSize">Number of items per page</param>
+        /// <param name="pageNumber">Page number to show</param>
+        /// <returns>List of matching tickets</returns>
+        /// <response code>Returns List of tickets</response>
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<TicketsDTO>> GetAllTickets(string? filterText,string? queryString,int pageSize=10,int pageNumber=1)
         {
             try
@@ -87,21 +116,21 @@ namespace HelpDesk.api.Controllers
             }
         }
 
+        /// <summary>
+        /// Create a new ticket
+        /// </summary>
+        /// <param name="newCreationTicket">Object of TicketCreationDTO</param>
+        /// <returnsNewly created ticket></returns>
+        /// <response code="201">Create new ticket in DB</response>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<TicketsDTO>> CreateTicket(TicketCreationDTO newCreationTicket)
         {
             try
             {
                 Ticket newTicket = _mapper.Map<Ticket>(newCreationTicket);
-
                 await _repository.createTicketAsync(newTicket);
-
-                //TicketsDTO displayTicket = _mapper.Map<TicketsDTO>(newTicket);
-                //return CreatedAtRoute("GetTicketByID",
-                //    new
-                //    {
-                //        id = newTicket.id
-                //    });
 
                 return Ok(newTicket);
             }
@@ -112,24 +141,21 @@ namespace HelpDesk.api.Controllers
             }
         }
 
+        /// <summary>
+        /// Update ticket details
+        /// </summary>
+        /// <param name="TicketId">Ticket ID to be updated</param>
+        /// <param name="updatedTicket">updated ticket</param>
+        /// <returns></returns>
         [HttpPut("{TicketId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+
         public IActionResult UpdateTicket(Guid TicketId, TicketsDTO updatedTicket)
         {
             try
             {
                  return NotFound();
-
-                //TicketsDTO? orignalTicket = dummydata.Tickets.Find(t => t.id == TicketId);
-
-                //if (orignalTicket == null)
-                //    return NotFound();
-                //else
-                //{
-                //    if (dummydata.UpdateTicket(TicketId, updatedTicket))
-                //        return NoContent();
-                //    else
-                //        return NotFound();
-                //  }
             }
             catch (Exception ex)
             {
@@ -175,7 +201,19 @@ namespace HelpDesk.api.Controllers
         //    }
         //}
 
+
+        /// <summary>
+        /// Delete a ticket
+        /// </summary>
+        /// <param name="ticketId">ID of ticket tobe deleted</param>
+        /// <returns></returns>
+        /// <response code="204">Ticket deleted successfuly</response>
         [HttpDelete("{TicketId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+
+
         public async Task<IActionResult> DeleteTicket(Guid ticketId)
         {
             try

@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>HelpDesk.api</name>
+    </assembly>
+    <members>
+        <member name="T:HelpDesk.api.Controllers.AuthenticationController">
+            <summary>
+            All actions for Authentication
+            </summary>
+        </member>
+        <member name="T:HelpDesk.api.Controllers.AuthenticationController.UserInfoDTO">
+            <summary>
+            UserInfo for login
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:HelpDesk.api.Controllers.AuthenticationController.Authenticate(HelpDesk.api.Controllers.AuthenticationController.UserInfoDTO)" -->
+        <member name="T:HelpDesk.api.Controllers.TicketController">
+            <summary>
+            All actions about tickets
+            </summary>
+        </member>
+        <member name="M:HelpDesk.api.Controllers.TicketController.GetTickets(System.Guid)">
+            <summary>
+            Get a single tickets by Ticket ID
+            </summary>
+            <param name="id">ID of the ticket</param>
+            <returns>An actionresult of TicketsDTO</returns>
+            <response code="200">Returns the requested Ticket</response>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:HelpDesk.api.Controllers.TicketController.GetAllTickets(System.String,System.String,System.Int32,System.Int32)" -->
+        <!-- Badly formed XML comment ignored for member "M:HelpDesk.api.Controllers.TicketController.CreateTicket(HelpDesk.api.Models.TicketCreationDTO)" -->
+        <member name="M:HelpDesk.api.Controllers.TicketController.UpdateTicket(System.Guid,HelpDesk.api.Models.TicketsDTO)">
+            <summary>
+            Update ticket details
+            </summary>
+            <param name="TicketId">Ticket ID to be updated</param>
+            <param name="updatedTicket">updated ticket</param>
+            <returns></returns>
+        </member>
+        <member name="M:HelpDesk.api.Controllers.TicketController.DeleteTicket(System.Guid)">
+            <summary>
+            Delete a ticket
+            </summary>
+            <param name="ticketId">ID of ticket tobe deleted</param>
+            <returns></returns>
+            <response code="204">Ticket deleted successfuly</response>
+        </member>
+    </members>
+</doc>
