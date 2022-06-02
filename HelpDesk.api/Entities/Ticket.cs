@@ -6,8 +6,9 @@ namespace HelpDesk.api.Entities
     public class Ticket
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity )]
+        public int id { get; set; }
+
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public string CreatedBy { get; set; } = String.Empty;
         public DateTime? UpdatedAt { get; set; }

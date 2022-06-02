@@ -32,7 +32,7 @@ namespace HelpDesk.api.Controllers
         }
 
         [HttpGet("{id}", Name = "GetTicketByID")]
-        public async Task<ActionResult<TicketsDTO>> GetTickets(Guid id)
+        public async Task<ActionResult<TicketsDTO>> GetTickets(int id)
         {
             try
             {
@@ -176,7 +176,7 @@ namespace HelpDesk.api.Controllers
         //}
 
         [HttpDelete("{TicketId}")]
-        public async Task<IActionResult> DeleteTicket(Guid ticketId)
+        public async Task<IActionResult> DeleteTicket(int ticketId)
         {
             try
             {

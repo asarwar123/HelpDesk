@@ -4,7 +4,8 @@ namespace HelpDesk.api.Models
 {
     public class TicketsDTO
     {
-        public string TicketId { get; set; }
+        public Guid id { get; set; }
+
         public DateTime CreatedAt { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? UpdatedAt { get; set; }

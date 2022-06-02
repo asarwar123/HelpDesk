@@ -19,7 +19,7 @@ namespace HelpDesk.api.Services
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> deleteTicketAysnc(Guid ticketId)
+        public async Task<bool> deleteTicketAysnc(int ticketId)
         {
             Ticket? ticket = await _context.Tickets.FirstOrDefaultAsync(t => t.id == ticketId);
 
@@ -34,7 +34,7 @@ namespace HelpDesk.api.Services
             return false;
         }
 
-        public async Task<Ticket?> getTicketAsync(Guid ticketId)
+        public async Task<Ticket?> getTicketAsync(int ticketId)
         {
             Ticket? ticket = await _context.Tickets.FindAsync(ticketId);
             return ticket;
@@ -96,7 +96,7 @@ namespace HelpDesk.api.Services
             //return await collection.OrderBy(t => t.CreatedAt).ToListAsync();
         }
 
-        public async Task<Ticket?> updateTicketAsync(Guid ticketId)
+        public async Task<Ticket?> updateTicketAsync(int ticketId)
         {
             Ticket? ticket = await _context.Tickets.FirstOrDefaultAsync(t => t.id == ticketId);
 
