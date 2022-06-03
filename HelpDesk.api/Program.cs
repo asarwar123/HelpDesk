@@ -1,3 +1,4 @@
+using Azure.Storage.Blobs;
 using HelpDesk.api.DBContexts;
 using HelpDesk.api.Services;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,13 @@ builder.Services.AddDbContext<DataBaseContext>(
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddScoped(_ =>
+{
+    return new BlobServiceClient(builder.Configuration["Azure:AzureBlobStorage:ConnectionString"]);
+});
+
+builder.Services.AddScoped<IFileUpload, FileUpload>();
 
 var app = builder.Build();
 
